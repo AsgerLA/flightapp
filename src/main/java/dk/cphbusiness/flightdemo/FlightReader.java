@@ -66,7 +66,10 @@ public class FlightReader {
             //flightInfoDTOList.forEach(System.out::println);
             System.out.println("Time: "+getTotalTime(flightInfoDTOList));
             System.out.println("Count: "+getCountAirlineFlight(flightInfoDTOList));
-            System.out.println(getListOfFlightsBetweenTwoAirports(flightInfoDTOList, "Fukuoka", "Haneda Airport"));
+            for (FlightInfoDTO f : getListOfFlightsBetweenTwoAirports(flightInfoDTOList, "Fukuoka", "Haneda Airport")) {
+                System.out.println(f.getOrigin()+" -> "+f.getDestination()+" totalTime:"+f.getDuration());
+            }
+            System.out.println();
             for (FlightInfoDTO f : getDayFlights(flightInfoDTOList)) {
                 System.out.println(f.getDeparture());
             }
