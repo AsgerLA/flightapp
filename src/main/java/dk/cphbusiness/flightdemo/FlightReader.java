@@ -18,11 +18,19 @@ import java.util.*;
  */
 public class FlightReader {
 
+    private static long getTotalTime(List<FlightInfoDTO> infoList) {
+        return infoList.stream()
+                .filter(i -> i.getAirline() != null && i.getAirline().equals("Royal Jordanian"))
+                .mapToLong(i -> i.getDuration().toMinutes())
+                .sum();
+    }
+
     public static void main(String[] args) {
         try {
             List<FlightDTO> flightList = getFlightsFromFile("flights.json");
             List<FlightInfoDTO> flightInfoDTOList = getFlightInfoDetails(flightList);
-            flightInfoDTOList.forEach(System.out::println);
+            //flightInfoDTOList.forEach(System.out::println);
+            System.out.println(getTotalTime(flightInfoDTOList));
         } catch (IOException e) {
             e.printStackTrace();
         }
