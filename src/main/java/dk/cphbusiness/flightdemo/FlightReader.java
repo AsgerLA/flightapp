@@ -42,8 +42,21 @@ public class FlightReader {
        List<FlightInfoDTO> resultList = infoList.stream().filter(i-> i.getOrigin()!= null
                && i.getDestination()!=null
                && i.getOrigin().equals(origin)
-               &&i.getDestination().equals(destination)).toList();
+               &&i.getDestination().equals(destination))
+               .sorted(Comparator.comparingLong(i -> i.getDuration().toMinutes()))
+               .toList();
        return resultList;
+    }
+
+    private static List<FlightInfoDTO> getDayFlights(List<FlightInfoDTO> infoList) {
+        List<FlightInfoDTO> resultList = infoList.stream()
+                .filter(i-> i.getOrigin()!= null
+                        && i.getDestination()!=null
+                        && i.getDeparture().getHour() >= 5
+                        && i.getDeparture().getHour() <= 23)
+                .sorted(Comparator.comparingLong(i -> i.getDeparture().getHour()*60 + i.getDeparture().getMinute()))
+                .toList();
+        return resultList;
     }
 
     public static void main(String[] args) {
@@ -54,6 +67,9 @@ public class FlightReader {
             System.out.println("Time: "+getTotalTime(flightInfoDTOList));
             System.out.println("Count: "+getCountAirlineFlight(flightInfoDTOList));
             System.out.println(getListOfFlightsBetweenTwoAirports(flightInfoDTOList, "Fukuoka", "Haneda Airport"));
+            for (FlightInfoDTO f : getDayFlights(flightInfoDTOList)) {
+                System.out.println(f.getDeparture());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
