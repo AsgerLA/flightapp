@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Purpose:
@@ -20,9 +21,21 @@ public class FlightReader {
 
     private static long getTotalTime(List<FlightInfoDTO> infoList) {
         return infoList.stream()
-                .filter(i -> i.getAirline() != null && i.getAirline().equals("Royal Jordanian"))
+                .filter(i -> i.getAirline() != null &&
+                        i.getDestination() != null &&
+                        i.getOrigin() != null &&
+                        i.getAirline().equals("Lufthansa"))
                 .mapToLong(i -> i.getDuration().toMinutes())
                 .sum();
+    }
+
+    private static int getCountAirlineFlight(List<FlightInfoDTO> infoList) {
+        return infoList.stream()
+                .filter(i -> i.getAirline() != null &&
+                        i.getDestination() != null &&
+                        i.getOrigin() != null &&
+                        i.getAirline().equals("Lufthansa"))
+                .collect(Collectors.toList()).size();
     }
 
     public static void main(String[] args) {
@@ -30,7 +43,8 @@ public class FlightReader {
             List<FlightDTO> flightList = getFlightsFromFile("flights.json");
             List<FlightInfoDTO> flightInfoDTOList = getFlightInfoDetails(flightList);
             //flightInfoDTOList.forEach(System.out::println);
-            System.out.println(getTotalTime(flightInfoDTOList));
+            System.out.println("Time: "+getTotalTime(flightInfoDTOList));
+            System.out.println("Count: "+getCountAirlineFlight(flightInfoDTOList));
         } catch (IOException e) {
             e.printStackTrace();
         }
