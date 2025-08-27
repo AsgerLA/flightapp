@@ -38,6 +38,14 @@ public class FlightReader {
                 .collect(Collectors.toList()).size();
     }
 
+    private static List<FlightInfoDTO> getListOfFlightsBetweenTwoAirports(List<FlightInfoDTO> infoList, String origin,String destination){
+       List<FlightInfoDTO> resultList = infoList.stream().filter(i-> i.getOrigin()!= null
+               && i.getDestination()!=null
+               && i.getOrigin().equals(origin)
+               &&i.getDestination().equals(destination)).toList();
+       return resultList;
+    }
+
     public static void main(String[] args) {
         try {
             List<FlightDTO> flightList = getFlightsFromFile("flights.json");
@@ -45,6 +53,7 @@ public class FlightReader {
             //flightInfoDTOList.forEach(System.out::println);
             System.out.println("Time: "+getTotalTime(flightInfoDTOList));
             System.out.println("Count: "+getCountAirlineFlight(flightInfoDTOList));
+            System.out.println(getListOfFlightsBetweenTwoAirports(flightInfoDTOList, "Fukuoka", "Haneda Airport"));
         } catch (IOException e) {
             e.printStackTrace();
         }
